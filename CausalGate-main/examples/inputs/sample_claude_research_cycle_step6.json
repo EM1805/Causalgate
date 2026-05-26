@@ -1,0 +1,14 @@
+{
+  "goal": "Generate a conservative, testable scientific hypothesis candidate about whether X may influence Y through an observed mechanism.",
+  "domain": "general_science_demo",
+  "max_steps": 2,
+  "dry_run": true,
+  "enable_identification": false,
+  "write_ledger": true,
+  "ledger_path": "out/scientific/claude_step6_ledger.jsonl",
+  "constraints": [
+    "Do not claim discovery or proof.",
+    "Return hypothesis_only unless CausalGate upgrades the status.",
+    "Include measurable prediction, negative control, placebo test, sensitivity check, data requirements, and limitations."
+  ]
+}

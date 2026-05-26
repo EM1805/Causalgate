@@ -1,0 +1,12 @@
+{
+  "action_name": "delete_resource",
+  "action_type": "mutation",
+  "target_resource": "prod_table",
+  "environment": "production",
+  "params": {
+    "resource_sensitivity": "high",
+    "rollback_available": false,
+    "approval_present": false,
+    "blast_radius": "high"
+  }
+}

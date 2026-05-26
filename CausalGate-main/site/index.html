@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CausalGate — Causal Firewall for AI Agents</title>
+  <meta name="description" content="CausalGate blocks, reviews, or allows AI-agent actions using causal authority scoring, policy checks, evidence packages, and audit reports." />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #11182f;
+      --panel2: #17213f;
+      --text: #edf2ff;
+      --muted: #aab6d3;
+      --line: rgba(255,255,255,.12);
+      --accent: #78f0c4;
+      --warn: #ffd166;
+      --danger: #ff6b6b;
+      --blue: #8ab4ff;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 0%, #23335d 0%, transparent 35%), var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    header { padding: 28px 0; border-bottom: 1px solid var(--line); }
+    nav { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: -.02em; }
+    .logo { width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--blue)); box-shadow: var(--shadow); }
+    .navlinks { display: flex; gap: 18px; color: var(--muted); font-size: 14px; }
+    .hero { padding: 84px 0 56px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 42px; align-items: center; }
+    .eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: 12px; }
+    h1 { font-size: clamp(42px, 7vw, 72px); line-height: .96; margin: 14px 0 22px; letter-spacing: -.06em; }
+    .sub { color: var(--muted); font-size: 20px; max-width: 700px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; padding: 13px 18px; font-weight: 700; border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.06); }
+    .btn.primary { background: var(--accent); color: #07120e; border-color: transparent; }
+    .panel { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); }
+    .terminal { padding: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13px; color: #dbe7ff; }
+    .dots { display: flex; gap: 8px; margin-bottom: 16px; }
+    .dot { width: 10px; height: 10px; border-radius: 100px; background: var(--line); }
+    .line { padding: 4px 0; }
+    .ok { color: var(--accent); } .review { color: var(--warn); } .block { color: var(--danger); } .muted { color: var(--muted); }
+    section { padding: 52px 0; }
+    h2 { font-size: 34px; letter-spacing: -.04em; margin: 0 0 18px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { padding: 24px; border-radius: 22px; background: rgba(255,255,255,.045); border: 1px solid var(--line); }
+    .card h3 { margin: 0 0 8px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); }
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 24px; }
+    .step { padding: 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); color: var(--muted); font-size: 14px; }
+    .step strong { display: block; color: var(--text); margin-bottom: 4px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    pre { white-space: pre-wrap; padding: 20px; border-radius: 18px; background: #07101f; border: 1px solid var(--line); color: #dbe7ff; overflow: auto; }
+    footer { padding: 36px 0 56px; color: var(--muted); border-top: 1px solid var(--line); }
+    @media (max-width: 860px) {
+      .hero, .split { grid-template-columns: 1fr; }
+      .grid3, .flow { grid-template-columns: 1fr; }
+      .navlinks { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav>
+        <div class="brand"><div class="logo"></div><span>CausalGate</span></div>
+        <div class="navlinks"><a href="#how">How it works</a><a href="#api">API</a><a href="#demo">Demo</a><a href="#sale">Asset sale</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">Causal firewall for AI agents</div>
+        <h1>Stop agents from acting on weak causal claims.</h1>
+        <p class="sub">CausalGate evaluates AI-agent actions before execution. It combines policy checks, causal evidence, authority scoring, and audit reports to return <strong>PASS</strong>, <strong>REVIEW</strong>, or <strong>HARD_BLOCK</strong>.</p>
+        <div class="cta">
+          <a class="btn primary" href="#demo">View 60-second demo</a>
+          <a class="btn" href="#api">See API example</a>
+        </div>
+      </div>
+      <div class="panel terminal" aria-label="demo terminal">
+        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="line muted">$ causalgate demo --out-dir out/demo --pretty</div>
+        <div class="line ok">✓ 01_read_only_pass → PASS</div>
+        <div class="line block">✓ 02_weak_causal_claim_block → HARD_BLOCK</div>
+        <div class="line review">✓ 03_strong_evidence_review → REVIEW</div>
+        <br />
+        <div class="line muted">Authority score: 83/100</div>
+        <div class="line review">Decision: REVIEW</div>
+        <div class="line">Reason: high-impact action has partial causal authority; production execution requires human review.</div>
+      </div>
+    </div>
+
+    <section id="how">
+      <div class="wrap">
+        <h2>From proposed action to causal authority decision.</h2>
+        <div class="flow">
+          <div class="step"><strong>1. Agent action</strong>Tool call, recommendation, or workflow mutation.</div>
+          <div class="step"><strong>2. Policy check</strong>Risk level, environment, approval, rollback.</div>
+          <div class="step"><strong>3. Evidence package</strong>SCM, identification, estimation, diagnostics.</div>
+          <div class="step"><strong>4. Authority score</strong>Weak, partial, or sufficient causal support.</div>
+          <div class="step"><strong>5. Decision report</strong>PASS, REVIEW, or HARD_BLOCK with audit trail.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap grid3">
+        <div class="card"><h3>Agent governance</h3><p>Add a causal evidence boundary before high-impact tool calls or recommendations.</p></div>
+        <div class="card"><h3>Causal authority</h3><p>Score whether an action has identifiable, estimated, and diagnosed causal support.</p></div>
+        <div class="card"><h3>Audit reports</h3><p>Generate JSON and Markdown reports with reasons, next steps, and decision digest.</p></div>
+      </div>
+    </section>
+
+    <section id="api">
+      <div class="wrap split">
+        <div>
+          <h2>Built for CLI, API, and agent runtimes.</h2>
+          <p class="sub">Use the Python API, run the FastAPI decision service, or integrate the CLI into agent workflows.</p>
+        </div>
+        <pre>from causalgate import AgentCausalFirewall, CausalEvidence
+
+firewall = AgentCausalFirewall()
+evidence = CausalEvidence.from_file("evidence.json")
+
+result = firewall.evaluate(
+    action="increase_ad_spend",
+    environment="production",
+    risk_level="high",
+    treatment="ad_spend",
+    outcome="revenue",
+    evidence=evidence,
+    require_causal_evidence=True,
+)
+
+print(result.firewall_decision)
+print(result.authority_score)</pre>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="wrap split">
+        <div>
+          <h2>60-second product demo.</h2>
+          <p class="sub">The included demo produces three audit reports: one allowed action, one blocked causal claim, and one high-impact action routed to review.</p>
+        </div>
+        <pre>python -m pip install -e .[server,test]
+causalgate demo --out-dir out/demo --pretty
+
+# API server
+causalgate api --host 0.0.0.0 --port 8000
+curl http://localhost:8000/v1/health</pre>
+      </div>
+    </section>
+
+    <section id="sale">
+      <div class="wrap">
+        <h2>Commercial asset package.</h2>
+        <div class="grid3">
+          <div class="card"><h3>Included</h3><p>Python package, CLI, FastAPI server, Dockerfile, examples, docs, reports, and commercial-license templates.</p></div>
+          <div class="card"><h3>Buyer use case</h3><p>Turn it into an AI governance SaaS, enterprise agent-firewall product, or managed consulting tool.</p></div>
+          <div class="card"><h3>Positioning</h3><p>“AI agent causal firewall with causal authority scoring and audit reports.”</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">CausalGate is source-available commercial software. It does not prove causality; it enforces explicit evidence requirements before high-impact agent actions.</div>
+  </footer>
+</body>
+</html>

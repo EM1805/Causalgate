@@ -1,0 +1,79 @@
+{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "method": "tools/call",
+  "params": {
+    "name": "causalgate_assess_falsification",
+    "arguments": {
+      "run_id": "demo_falsification_step5",
+      "goal": "Generate a testable causal hypothesis candidate.",
+      "hypothesis": {
+        "hypothesis_id": "hyp_step5_valid_candidate",
+        "claim": "X may causally influence Y through M, controlling for Z.",
+        "claim_level": "hypothesis_only",
+        "variables": {
+          "treatment": "X",
+          "outcome": "Y",
+          "mediators": [
+            "M"
+          ],
+          "confounders": [
+            "Z"
+          ]
+        },
+        "dag": {
+          "edges": [
+            [
+              "Z",
+              "X"
+            ],
+            [
+              "Z",
+              "Y"
+            ],
+            [
+              "X",
+              "M"
+            ],
+            [
+              "M",
+              "Y"
+            ]
+          ]
+        },
+        "assumptions": [
+          "Z is observed",
+          "X occurs before Y",
+          "no interference between units"
+        ],
+        "adjustment_set": [
+          "Z"
+        ],
+        "measurable_predictions": [
+          "If X increases, Y should increase within a 7-day lag after controlling for Z."
+        ],
+        "falsification_tests": [
+          "negative control outcome",
+          "future-X placebo temporal leakage test",
+          "hidden confounding sensitivity check"
+        ],
+        "negative_controls": [
+          "Outcome N should not change when X changes."
+        ],
+        "placebo_tests": [
+          "future-X should not predict past-Y."
+        ],
+        "sensitivity_checks": [
+          "Repeat the estimate under hidden-confounding sensitivity bounds."
+        ],
+        "data_requirements": [
+          "time ordered observations of X, M, Y, and Z",
+          "observed Z for all units",
+          "7-day lag measurement window"
+        ],
+        "test_plan": "Estimate X->Y controlling for Z, compare with negative control N, and run future-X placebo."
+      },
+      "enable_identification": false
+    }
+  }
+}

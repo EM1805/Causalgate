@@ -1,0 +1,54 @@
+version: agent_action_firewall_policy_v1_step98_enterprise_example
+default_action: PASS
+fail_closed_on_policy_error: true
+required_trusted_fields:
+  - environment
+rules:
+  - id: block_destructive_production_without_approval
+    priority: 10
+    action: HARD_BLOCK
+    reason_code: FIREWALL_BLOCK_DESTRUCTIVE_PROD_NO_APPROVAL
+    description: Block destructive production changes without trusted approval and rollback.
+    when:
+      environment: production
+      action_type:
+        - mutation
+        - delete
+        - destructive
+      approval_present: false
+      rollback_available: false
+
+  - id: review_external_message_or_data_flow
+    priority: 20
+    action: REVIEW
+    reason_code: FIREWALL_REVIEW_EXTERNAL_DATA_FLOW
+    description: Route external messages/data sharing to review.
+    when:
+      recipient_external: true
+
+  - id: review_sensitive_customer_data
+    priority: 25
+    action: REVIEW
+    reason_code: FIREWALL_REVIEW_SENSITIVE_DATA
+    description: Review tool calls involving sensitive or customer data.
+    when:
+      data_classification:
+        - sensitive
+        - customer
+        - regulated
+
+  - id: review_live_money_or_trading
+    priority: 30
+    action: REVIEW
+    reason_code: FIREWALL_REVIEW_LIVE_MONEY_ACTION
+    description: Review live money or trading actions.
+    when:
+      real_money: true
+
+  - id: block_policy_bypass_attempt
+    priority: 5
+    action: HARD_BLOCK
+    reason_code: FIREWALL_BLOCK_POLICY_BYPASS
+    description: Block any attempt to bypass policy controls.
+    when:
+      policy_bypass: true

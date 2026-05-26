@@ -1,0 +1,17 @@
+{
+  "note": "Remote Claude Managed Agents require an HTTP/streamable MCP server. The current CausalGate server is stdio-first; add HTTP transport before using this config in production.",
+  "agent_definition_hint": {
+    "mcp_servers": [
+      {
+        "type": "url",
+        "name": "causalgate",
+        "url": "https://YOUR_DOMAIN.example/mcp"
+      }
+    ],
+    "tools": [
+      {"type": "agent_toolset_20260401"},
+      {"type": "mcp_toolset", "mcp_server_name": "causalgate"}
+    ],
+    "beta_header": "managed-agents-2026-04-01"
+  }
+}

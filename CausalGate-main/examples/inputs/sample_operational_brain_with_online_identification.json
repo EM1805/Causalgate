@@ -1,0 +1,47 @@
+{
+  "user_message": "The user asks a clear low-risk technical question. Should the agent answer directly?",
+  "candidate_actions": [
+    "answer_directly",
+    "ask_clarification"
+  ],
+  "context": {
+    "environment": "development",
+    "ambiguity": "low",
+    "risk_level": "low"
+  },
+  "risk_level": "low",
+  "intended_outcome": "task_success",
+  "protected_outcome": "user_or_system_harm",
+  "scm_graph": {
+    "nodes": [
+      {
+        "id": "agent_action"
+      },
+      {
+        "id": "task_success"
+      },
+      {
+        "id": "ambiguity"
+      }
+    ],
+    "edges": [
+      [
+        "ambiguity",
+        "agent_action"
+      ],
+      [
+        "ambiguity",
+        "task_success"
+      ],
+      [
+        "agent_action",
+        "task_success"
+      ]
+    ]
+  },
+  "treatment": "agent_action",
+  "outcome": "task_success",
+  "adjustment_set": [
+    "ambiguity"
+  ]
+}

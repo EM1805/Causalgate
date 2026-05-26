@@ -1,0 +1,41 @@
+{
+  "hypothesis_id": "hyp_step1_demo",
+  "run_id": "scientific_loop_demo",
+  "step": 1,
+  "title": "Sleep timing and next-day focus",
+  "claim": "Earlier sleep timing may improve next-day focus through increased sleep duration, controlling for caffeine intake.",
+  "claim_level": "hypothesis_only",
+  "domain": "behavioral_science",
+  "variables": {
+    "treatment": "earlier_sleep_time",
+    "outcome": "next_day_focus",
+    "mediators": ["sleep_duration"],
+    "confounders": ["caffeine_intake", "weekday"]
+  },
+  "candidate_equation": "focus_t1 = a*earlier_sleep_time_t0 + b*sleep_duration + c*caffeine_intake + e",
+  "dag": {
+    "edges": [
+      ["earlier_sleep_time", "sleep_duration"],
+      ["sleep_duration", "next_day_focus"],
+      ["caffeine_intake", "earlier_sleep_time"],
+      ["caffeine_intake", "next_day_focus"],
+      ["weekday", "earlier_sleep_time"],
+      ["weekday", "next_day_focus"]
+    ]
+  },
+  "assumptions": [
+    "sleep timing is measured before next-day focus",
+    "caffeine intake and weekday are observed",
+    "no claim stronger than testable candidate is allowed"
+  ],
+  "falsification_tests": [
+    "future-treatment placebo test",
+    "negative control outcome unrelated to focus"
+  ],
+  "data_requirements": [
+    "daily records with timestamps",
+    "observed caffeine intake",
+    "at least several weeks of repeated observations"
+  ],
+  "test_plan": "Run temporal placebo, negative control, and conservative counterfactual matching before any stronger conclusion."
+}

@@ -1,0 +1,26 @@
+version: strict_agent_firewall_v1
+default_action: REVIEW
+fail_closed_on_policy_error: true
+required_trusted_fields:
+  - environment
+rules:
+  - id: block_destructive_production_without_approval
+    priority: 10
+    action: HARD_BLOCK
+    reason_code: FIREWALL_BLOCK_DESTRUCTIVE_PROD_NO_APPROVAL
+    description: Block destructive/mutating production actions without approval and rollback.
+    when:
+      environment: production
+      action_type:
+        in: [mutation, delete, destructive]
+      approval_present: false
+      rollback_available: false
+
+  - id: review_high_risk
+    priority: 20
+    action: REVIEW
+    reason_code: FIREWALL_REVIEW_HIGH_RISK_ACTION
+    description: High-risk actions require review.
+    when:
+      risk_level:
+        in: [high, critical]

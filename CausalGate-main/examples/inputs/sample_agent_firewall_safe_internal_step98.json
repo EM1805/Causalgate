@@ -1,0 +1,17 @@
+{
+  "request_id": "fw-step98-safe-internal",
+  "user_message": "Post the weekly internal summary.",
+  "candidate_action": "send_email_internal",
+  "action_name": "send_email_internal",
+  "action_type": "communication",
+  "target_resource": "weekly_summary.txt",
+  "environment": "staging",
+  "risk_level": "low",
+  "requires_tool": true,
+  "trusted_runtime_context": {
+    "recipient_external": false,
+    "approval_present": true,
+    "rollback_available": true,
+    "data_classification": "internal"
+  }
+}

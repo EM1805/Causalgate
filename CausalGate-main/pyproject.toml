@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "causalgate"
+version = "0.6.1"
+description = "Source-available causal firewall for AI agents with discovery, SCM identification, estimation, diagnostics, and audit reports."
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+  "numpy>=1.26,<2.4",
+  "pandas>=2.2.3,<2.4",
+  "PyYAML>=6.0,<7",
+]
+
+
+[project.scripts]
+causalgate = "cli:main"
+
+[project.optional-dependencies]
+server = [
+  "fastapi>=0.110,<1",
+  "uvicorn>=0.27,<1",
+]
+hf = [
+  "fastapi>=0.110,<1",
+  "uvicorn>=0.27,<1",
+]
+langgraph = [
+  "langgraph>=0.2,<1",
+]
+test = [
+  "pytest>=8,<9",
+]
+
+[tool.setuptools.packages.find]
+include = [
+  "causalgate*",
+  "scm_parts*",
+  "estimation_parts*",
+  "runtime*",
+  "pcmci_discovery_parts*",
+  "common*",
+  "contracts*",
+  "offline*",
+  "path_parts*",
+]
+
+[tool.setuptools]
+py-modules = ["cli", "config", "fs_utils", "runtime_compat", "runtime_env"]
+
+[tool.setuptools.data-files]
+"share/causalgate" = [
+  "action_registry.yaml",
+  "candidate_family_map.yaml",
+  "dangerous_paths.yaml",
+  "historical_action_events.jsonl",
+  "operational_causal_graph.yaml",
+  "schema_mapping.yaml",
+]

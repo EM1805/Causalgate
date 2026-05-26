@@ -1,0 +1,17 @@
+{
+  "request_id": "demo-prod-change-001",
+  "user_message": "Deploy a config change to the payments service.",
+  "action_name": "deploy_config_change",
+  "tool_name": "deploy_config_change",
+  "action_type": "mutation",
+  "target_resource": "payments-service",
+  "trusted_runtime_context": {
+    "environment": "production",
+    "risk_level": "high",
+    "approval_present": false,
+    "rollback_available": false
+  },
+  "untrusted_llm_context": {
+    "agent_rationale": "The deployment should reduce latency based on recent metrics."
+  }
+}

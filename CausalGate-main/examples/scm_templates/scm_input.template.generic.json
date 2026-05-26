@@ -1,0 +1,53 @@
+{
+  "schema_version": "causalgate.scm_input.v1",
+  "name": "generic_scm_template",
+  "description": "Generic SCM-first input. Replace placeholder variables with your domain variables before running CausalGate.",
+  "nodes": [
+    {"id": "intervention_variable", "role": "treatment", "observed": true, "description": "Variable/action you may intervene on."},
+    {"id": "outcome_variable", "role": "outcome", "observed": true, "description": "Outcome you want to causally protect or improve."},
+    {"id": "context_variable", "role": "covariate", "observed": true, "description": "Observed context/confounder candidate."},
+    {"id": "U_outcome", "role": "exogenous", "observed": false, "description": "Unobserved disturbance for the outcome equation."}
+  ],
+  "edges": [
+    ["intervention_variable", "outcome_variable"],
+    ["context_variable", "intervention_variable"],
+    ["context_variable", "outcome_variable"],
+    ["U_outcome", "outcome_variable"]
+  ],
+  "queries": [
+    {
+      "id": "q_main_effect",
+      "type": "total_effect",
+      "treatment": "intervention_variable",
+      "outcome": "outcome_variable",
+      "estimand": "E[outcome_variable | do(intervention_variable)]"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "a_graph_is_domain_reviewed",
+      "text": "The graph was reviewed by a domain owner before being used for decisions.",
+      "status": "required"
+    },
+    {
+      "id": "a_positivity",
+      "text": "There is sufficient overlap/support for the treatment across relevant contexts.",
+      "status": "required"
+    }
+  ],
+  "structural_equations": {
+    "intervention_variable": "f_intervention(context_variable, U_intervention)",
+    "outcome_variable": "f_outcome(intervention_variable, context_variable, U_outcome)"
+  },
+  "exogenous": {
+    "U_intervention": {"distribution": "unknown", "observed": false},
+    "U_outcome": {"distribution": "unknown", "observed": false}
+  },
+  "data_path": "data.csv",
+  "discovery_policy": "optional_suggestion_only",
+  "safety_policy": {
+    "default_decision": "abstain_or_block_when_unidentified",
+    "require_identification": true,
+    "require_estimation_evidence": true
+  }
+}

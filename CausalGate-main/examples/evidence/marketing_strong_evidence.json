@@ -1,0 +1,30 @@
+{
+  "source": "synthetic_marketing_roi_demo",
+  "method": "PCMCI + SCM-ID + double_ml",
+  "identified": true,
+  "identification_status": "identified",
+  "estimand_type": "total_effect",
+  "effect_estimated": true,
+  "estimate": 0.18,
+  "confidence_interval": [
+    0.09,
+    0.27
+  ],
+  "confidence": "medium",
+  "diagnostics_passed": 4,
+  "diagnostics_total": 6,
+  "sensitivity_risk": "medium",
+  "hidden_confounding_risk": "medium",
+  "sample_size": 1460,
+  "scm_available": true,
+  "discovery_graph_available": false,
+  "placebo_passed": null,
+  "negative_controls_passed": null,
+  "stability_score": 0.72,
+  "assumptions": [
+    "No unmeasured confounding after listed controls, subject to review",
+    "Temporal ordering is respected",
+    "Stable unit treatment value for the analyzed period",
+    "Sensitivity analysis remains incomplete for autonomous execution"
+  ]
+}

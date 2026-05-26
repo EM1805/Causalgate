@@ -1,0 +1,15 @@
+{
+  "action_name": "send_email_external",
+  "action_type": "communication",
+  "target_resource": "customer_export.csv",
+  "environment": "production",
+  "params": {
+    "recipient_scope": "external",
+    "resource_sensitivity": "high",
+    "recipient_trust_level": "unknown",
+    "attachment_present": true,
+    "approval_present": false,
+    "rollback_available": false,
+    "blast_radius": "medium"
+  }
+}

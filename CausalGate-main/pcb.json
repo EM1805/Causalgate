@@ -1,0 +1,58 @@
+{
+  "policy": {
+    "enabled": true
+  },
+  "target_col": "harm_event",
+  "date_col": "date",
+  "out_dir": "out",
+  "level25": {
+    "max_lag": 7,
+    "min_obs": 80,
+    "discovery_mode": "conservative",
+    "keep_min_selection_score": 0.44,
+    "keep_min_evidence_score": 0.43,
+    "keep_min_priority": 0.44,
+    "causal_min_incremental_r2": 0.015,
+    "stability_window": 60,
+    "stability_stride": 14,
+    "min_stability_windows": 5,
+    "family_map_path": "candidate_family_map.yaml"
+  },
+  "level32": {
+    "enable_metrics": true,
+    "enable_matches_table": true,
+    "enable_placebo": true,
+    "negative_control_enable": true,
+    "negative_control_outcome_col": "negative_control_outcome",
+    "propensity_action_col": "action_active",
+    "lookback_days": 120,
+    "lookback_rows": 120,
+    "k_controls": 12,
+    "min_matched": 5,
+    "match_dist_max": 1.5,
+    "z_success": 0.2,
+    "min_trials_validated": 1,
+    "min_trials_confirmed": 2,
+    "min_success_lb_validated": 0.34,
+    "min_success_lb_confirmed": 0.5,
+    "min_confidence_validated": 0.35,
+    "min_confidence_confirmed": 0.55,
+    "bootstrap_b": 200
+  },
+  "data_schema": {
+    "primary_data": "data.csv",
+    "event_panel": "data/action_event_panel.csv",
+    "date_col": "date",
+    "target_col": "harm_event",
+    "negative_control_outcome_col": "negative_control_outcome",
+    "action_active_col": "action_active",
+    "event_time_col": "event_time",
+    "event_outcome_aliases": [
+      "incident_detected",
+      "outcome",
+      "observed_harms"
+    ],
+    "outcome_col": "harm_event"
+  },
+  "outcome_col": "harm_event"
+}

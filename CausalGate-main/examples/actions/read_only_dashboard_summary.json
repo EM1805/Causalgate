@@ -1,0 +1,18 @@
+{
+  "request_id": "demo-read-only-001",
+  "action_name": "summarize_dashboard",
+  "tool_name": "summarize_dashboard",
+  "action_type": "read",
+  "target_resource": "metrics-dashboard",
+  "risk_level": "low",
+  "environment": "staging",
+  "approval_present": false,
+  "rollback_available": true,
+  "trusted_runtime_context": {
+    "environment": "staging",
+    "risk_level": "low"
+  },
+  "untrusted_llm_context": {
+    "agent_rationale": "The agent only wants to summarize metrics for a human operator."
+  }
+}

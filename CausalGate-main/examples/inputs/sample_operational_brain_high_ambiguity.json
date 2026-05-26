@@ -1,0 +1,20 @@
+{
+  "request_id": "demo-ob-step2-001",
+  "source": "llm_candidate_planner",
+  "user_message": "Non funziona, sistemalo.",
+  "candidate_actions": [
+    "answer_directly",
+    "ask_clarification",
+    "use_tool"
+  ],
+  "context": {
+    "task_type": "debugging",
+    "ambiguity": "high",
+    "risk_level": "medium",
+    "environment": "development",
+    "approval_present": false,
+    "rollback_available": true
+  },
+  "intended_outcome": "task_success",
+  "protected_outcome": "wrong_answer_or_unwanted_side_effect"
+}

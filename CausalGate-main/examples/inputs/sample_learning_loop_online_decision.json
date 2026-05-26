@@ -1,0 +1,8 @@
+{
+  "user_message": "Non funziona, sistemalo.",
+  "context": {
+    "environment": "development",
+    "ambiguity": "high"
+  },
+  "audit_log_path": "out/learning/audit_log.jsonl"
+}

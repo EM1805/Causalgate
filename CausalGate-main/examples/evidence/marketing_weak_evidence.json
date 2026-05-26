@@ -1,0 +1,17 @@
+{
+  "source": "correlation_only_agent_claim",
+  "method": "correlation_screen",
+  "identified": false,
+  "identification_status": "unknown",
+  "estimand_type": "unknown",
+  "effect_estimated": false,
+  "confidence": "low",
+  "diagnostics_passed": 0,
+  "diagnostics_total": 0,
+  "sensitivity_risk": "unknown",
+  "hidden_confounding_risk": "unknown",
+  "sample_size": 60,
+  "scm_available": false,
+  "discovery_graph_available": false,
+  "assumptions": []
+}

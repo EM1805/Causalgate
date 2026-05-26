@@ -1,0 +1,18 @@
+{
+  "request_id": "demo-marketing-001",
+  "action_name": "increase_ad_spend",
+  "tool_name": "increase_ad_spend",
+  "action_type": "mutation",
+  "target_resource": "paid-search-budget",
+  "risk_level": "high",
+  "environment": "production",
+  "approval_present": true,
+  "rollback_available": true,
+  "treatment": "ad_spend",
+  "outcome": "revenue",
+  "causal_query": {
+    "effect": "total",
+    "time_window_days": 14
+  },
+  "require_causal_evidence": true
+}

@@ -1,0 +1,17 @@
+{
+  "math_claim": {
+    "claim_id": "step99-finite-identity-demo",
+    "title": "Finite binomial identity proof obligation",
+    "problem_name": "Binomial identity",
+    "claim": "For natural n, sum_{k=0}^n binom(n,k)=2^n.",
+    "claim_level": "proof_sketch_only",
+    "definitions": ["n is a natural number", "binom(n,k) is the binomial coefficient"],
+    "formal_statement": "theorem sum_choose_eq_two_pow (n : Nat) : (Finset.range (n+1)).sum (fun k => Nat.choose n k) = 2^n := by",
+    "lemmas": ["Use the binomial theorem with x=1 and y=1"],
+    "proof_sketch": "Apply the binomial theorem and simplify.",
+    "formal_system": "Lean4",
+    "metadata": {"demo": "step99"}
+  },
+  "max_rounds": 2,
+  "auto_revise": true
+}

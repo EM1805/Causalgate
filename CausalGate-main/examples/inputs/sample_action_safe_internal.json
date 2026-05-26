@@ -1,0 +1,15 @@
+{
+  "action_name": "send_email_internal",
+  "action_type": "communication",
+  "target_resource": "weekly_summary.txt",
+  "environment": "staging",
+  "params": {
+    "recipient_scope": "internal",
+    "resource_sensitivity": "low",
+    "recipient_trust_level": "high",
+    "attachment_present": false,
+    "approval_present": true,
+    "rollback_available": true,
+    "blast_radius": "low"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "decision_event_id": "decision-example",
+  "request_id": "request-example",
+  "selected_action": "paper_trade_limit_order",
+  "outcome": "success",
+  "success": true,
+  "harm": false,
+  "user_satisfaction": 5,
+  "latency_ms": 120,
+  "metadata": {
+    "source": "manual_review"
+  }
+}

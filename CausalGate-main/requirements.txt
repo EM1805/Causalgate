@@ -1,0 +1,12 @@
+# CausalGate core runtime dependencies
+# Supported Python: >=3.10,<3.14
+#
+# Keep this file small: CausalGate's core causal/runtime stack currently
+# depends only on numpy, pandas, and PyYAML. Optional HTTP/MCP and
+# LangGraph dependencies live in separate requirement files.
+#
+# Keep upper bounds aligned with runtime_compat.assert_scientific_stack().
+
+numpy>=1.26,<2.4
+pandas>=2.2.3,<2.4
+PyYAML>=6.0,<7

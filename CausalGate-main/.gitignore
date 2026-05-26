@@ -1,0 +1,12 @@
+# Local package artifacts
+*.zip
+
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+out/
+
+# Local/editor files
+.DS_Store
+.vscode/

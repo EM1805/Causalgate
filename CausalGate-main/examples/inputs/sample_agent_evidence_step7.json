@@ -1,0 +1,20 @@
+{
+  "user_message": "Abbassa il prezzo del 20% per aumentare le conversioni.",
+  "evidence_output_dir": "examples/inputs/sample_agent_evidence_out_step7",
+  "trusted_runtime_context": {
+    "environment": "production",
+    "risk_level": "high",
+    "approval_present": false,
+    "rollback_available": false
+  },
+  "candidate_actions": [
+    {
+      "action_name": "price_discount",
+      "candidate_action": "price_discount",
+      "action_type": "state_change",
+      "target_resource": "pricing",
+      "treatment": "price_discount",
+      "outcome": "conversion_rate"
+    }
+  ]
+}

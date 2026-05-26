@@ -1,0 +1,8 @@
+{
+  "action_name": "answer_directly",
+  "candidate_action": "answer_directly",
+  "action_type": "communication",
+  "target_resource": "conversation",
+  "environment": "development",
+  "user_message": "Simple low-risk question with no graph available."
+}

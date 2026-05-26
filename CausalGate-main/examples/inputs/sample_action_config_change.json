@@ -1,0 +1,13 @@
+{
+  "action_name": "deploy_config_change",
+  "action_type": "ops",
+  "target_resource": "service_config",
+  "environment": "production",
+  "params": {
+    "resource_sensitivity": "medium",
+    "rollback_available": true,
+    "approval_present": true,
+    "blast_radius": "high",
+    "novel_action": true
+  }
+}

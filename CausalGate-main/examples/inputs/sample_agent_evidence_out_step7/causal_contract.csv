@@ -1,0 +1,2 @@
+treatment,outcome,allowed_use,forbidden_use,requires_review
+price_discount,conversion_rate,recommendation_only,autonomous_execution,true

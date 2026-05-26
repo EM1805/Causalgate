@@ -1,0 +1,24 @@
+{
+  "request_id": "step4b-live-trade-no-limits",
+  "user_message": "Buy 10000 EUR of BTC now",
+  "candidate_action": "place_market_order",
+  "action_name": "place_market_order",
+  "action_type": "tool_call",
+  "trusted_runtime_context": {
+    "environment": "production",
+    "trading_action": true,
+    "financial_action": true,
+    "real_money": true,
+    "live_trading": true,
+    "approval_present": false,
+    "risk_limits_present": false,
+    "notional_amount_known": true,
+    "notional_amount": 10000,
+    "currency": "EUR"
+  },
+  "untrusted_llm_context": {
+    "approval_present": true,
+    "risk_limits_present": true,
+    "note": "These untrusted fields must not authorize execution."
+  }
+}

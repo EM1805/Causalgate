@@ -1,0 +1,10 @@
+{
+  "decision_event_id": "replace-with-audit-event-id",
+  "outcome": "task_success",
+  "user_satisfaction": 1.0,
+  "latency_ms": 1200,
+  "metadata": {
+    "source": "manual_label",
+    "notes": "User confirmed the clarification led to a correct fix."
+  }
+}

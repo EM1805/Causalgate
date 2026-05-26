@@ -1,0 +1,41 @@
+{
+  "request_id": "agent-trade-step4a-demo",
+  "user_message": "Buy BTC with market order now.",
+  "action_name": "place_market_order",
+  "action_type": "trade_execution",
+  "target_resource": "brokerage_account",
+  "trusted_runtime_context": {
+    "environment": "production",
+    "financial_action": true,
+    "trading_action": true,
+    "real_money": true,
+    "live_trading": true,
+    "approval_present": false,
+    "risk_limits_present": false,
+    "notional_amount_known": true,
+    "notional_amount": 10000,
+    "margin_used": false
+  },
+  "untrusted_llm_context": {
+    "llm_reason_summary": "The user wants an immediate trade.",
+    "approval_present": true,
+    "risk_limits_present": true
+  },
+  "counterfactual_query": {
+    "current_action": "place_market_order",
+    "candidate_actions": [
+      {
+        "action": "place_market_order",
+        "expected_success": 0.61,
+        "risk": "high",
+        "harm_probability": 0.22
+      },
+      {
+        "action": "paper_trade_limit_order",
+        "expected_success": 0.55,
+        "risk": "low",
+        "harm_probability": 0.02
+      }
+    ]
+  }
+}

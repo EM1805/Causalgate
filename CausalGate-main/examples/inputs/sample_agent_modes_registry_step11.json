@@ -1,0 +1,15 @@
+{
+  "agent_mode": "ops_agent",
+  "user_message": "Deploy this change to production",
+  "execute_tools": true,
+  "trusted_runtime_context": {
+    "environment": "production",
+    "approval_present": false
+  },
+  "candidate_actions": [
+    {
+      "action_name": "deploy_code",
+      "action_type": "ops"
+    }
+  ]
+}

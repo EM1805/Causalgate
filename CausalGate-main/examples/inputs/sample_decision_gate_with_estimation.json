@@ -1,0 +1,15 @@
+{
+  "user_message": "Rispondi direttamente se migliora il task success.",
+  "candidate_action": "answer_directly",
+  "action_name": "answer_directly",
+  "action_type": "communication",
+  "target_resource": "conversation",
+  "environment": "development",
+  "risk_level": "low",
+  "estimation_query": {
+    "treatment": "action_active",
+    "outcome": "task_success",
+    "adjustment_set": ["ambiguity"],
+    "data_path": "examples/inputs/sample_estimation_adapter_data.csv"
+  }
+}

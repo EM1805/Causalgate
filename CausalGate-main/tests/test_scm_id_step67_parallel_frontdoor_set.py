@@ -1,0 +1,55 @@
+from __future__ import annotations
+
+import json
+
+from scm_parts.admg import admg_from_edges
+from scm_parts.id_full import full_id
+from scm_parts.id_full_readiness import run_full_id_readiness_matrix
+from scm_parts.id_status import id_capability_flags
+
+
+def test_step67_parallel_frontdoor_set_id7_formula_is_canonical():
+    g = admg_from_edges(
+        ["X", "Z1", "Z2", "Y"],
+        [("X", "Z1"), ("X", "Z2"), ("Z1", "Y"), ("Z2", "Y")],
+        [("X", "Y")],
+    )
+    row = full_id(g, ["X"], ["Y"]).to_dict()
+    assert row["identified"] is True
+    assert row["primary_formula_authority"] == "id_canonical_formula_step60"
+    assert row["canonical_formula_used_for_output"] == 1
+    assert row["canonical_id7_carried_q_formula_used"] == 1
+    assert "sum_{Z1,Z2}" in row["formula"]
+    assert "P(Z1,Z2 | X)" in row["formula"]
+    assert "P(Y | X_prime,Z1,Z2)" in row["formula"]
+    payload = json.loads(row["canonical_formula_json"])
+    assert payload["reason_codes"] == "CANONICAL_ID7_PARALLEL_FRONTDOOR_SET_CARRIED_Q_FORMULA_STEP67"
+
+
+def test_step67_parallel_frontdoor_set_is_strict_and_blocks_extra_edges():
+    g = admg_from_edges(
+        ["X", "Z1", "Z2", "Y"],
+        [("X", "Z1"), ("X", "Z2"), ("Z1", "Y"), ("Z2", "Y"), ("Z1", "Z2")],
+        [("X", "Y")],
+    )
+    row = full_id(g, ["X"], ["Y"]).to_dict()
+    assert not (row["primary_formula_authority"] == "id_canonical_formula_step60" and "P(Z1,Z2 | X)" in row.get("formula", ""))
+    assert row["full_id_claim_allowed"] == 1
+
+
+def test_step67_readiness_matrix_includes_parallel_frontdoor_case():
+    matrix = run_full_id_readiness_matrix()
+    assert matrix["matrix_version"] == "id_full_readiness_matrix_v11_step80"
+    assert matrix["all_passed"] == 1
+    assert matrix["n_cases"] == 26
+    rows = {r["case_id"]: r for r in matrix["rows"]}
+    row = rows["id_parallel_frontdoor_set_canonical_id7_step67"]
+    assert row["passed"] is True
+    assert row["canonical_id7_carried_q_formula_used"] == "1"
+
+
+def test_step67_status_flags_present_without_full_id_claim():
+    flags = id_capability_flags()
+    assert flags["id_full_parallel_frontdoor_set_id7_step67_implemented"] == 1
+    assert flags["full_recursive_id_implemented"] == 1
+    assert flags["full_id_claim_allowed"] == 1

@@ -1,0 +1,15 @@
+{
+  "math_claim": {
+    "claim_id": "step99-riemann-overclaim-demo",
+    "title": "Alleged proof of the Riemann Hypothesis",
+    "problem_name": "Riemann Hypothesis",
+    "claim": "I solved and proved the Riemann Hypothesis by a new symmetry of the zeta function.",
+    "claim_level": "formal_proof_claimed",
+    "definitions": ["zeta(s) denotes the Riemann zeta function after analytic continuation"],
+    "proof_sketch": "A symmetry argument suggests non-trivial zeros should lie on the critical line.",
+    "formal_system": "Lean4",
+    "metadata": {"demo": "step99"}
+  },
+  "max_rounds": 2,
+  "auto_revise": true
+}

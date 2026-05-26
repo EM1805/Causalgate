@@ -1,0 +1,65 @@
+{
+  "schema_version": "causalgate.scm_input.v1",
+  "name": "agent_ai_action_scm_template",
+  "description": "SCM template for agent-action safety. Use action_intensity/action_type as intervention and user_or_system_harm as protected outcome.",
+  "nodes": [
+    {"id": "agent_action", "role": "treatment", "observed": true, "description": "Action selected by the agent."},
+    {"id": "action_intensity", "role": "treatment_modifier", "observed": true, "description": "Magnitude/risk level of the action."},
+    {"id": "environment_context", "role": "covariate", "observed": true, "description": "State/context before the action."},
+    {"id": "policy_constraint", "role": "policy", "observed": true, "description": "Applicable rule, invariant, or safety constraint."},
+    {"id": "user_or_system_harm", "role": "outcome", "observed": true, "description": "Protected outcome: harm, incident, policy violation, or irreversible change."},
+    {"id": "task_success", "role": "secondary_outcome", "observed": true, "description": "Useful outcome, never allowed to override hard safety."},
+    {"id": "U_harm", "role": "exogenous", "observed": false}
+  ],
+  "edges": [
+    ["environment_context", "agent_action"],
+    ["environment_context", "user_or_system_harm"],
+    ["policy_constraint", "agent_action"],
+    ["agent_action", "action_intensity"],
+    ["agent_action", "task_success"],
+    ["action_intensity", "user_or_system_harm"],
+    ["policy_constraint", "user_or_system_harm"],
+    ["U_harm", "user_or_system_harm"]
+  ],
+  "queries": [
+    {
+      "id": "q_action_harm_effect",
+      "type": "safety_total_effect",
+      "treatment": "agent_action",
+      "outcome": "user_or_system_harm",
+      "estimand": "E[user_or_system_harm | do(agent_action)]"
+    },
+    {
+      "id": "q_intensity_harm_effect",
+      "type": "dose_response_or_monotonic_risk",
+      "treatment": "action_intensity",
+      "outcome": "user_or_system_harm",
+      "estimand": "E[user_or_system_harm | do(action_intensity)]"
+    }
+  ],
+  "assumptions": [
+    {"id": "a_no_unreviewed_action_edges", "text": "Every action-to-harm edge must be domain-reviewed before allow decisions.", "status": "required"},
+    {"id": "a_past_only_evidence", "text": "Estimation and controls must use past-only evidence when evaluating agent actions.", "status": "required"},
+    {"id": "a_safety_priority", "text": "Task success cannot override an identified or plausible harm path.", "status": "required"}
+  ],
+  "structural_equations": {
+    "agent_action": "f_action(environment_context, policy_constraint, U_action)",
+    "action_intensity": "f_intensity(agent_action, environment_context, U_intensity)",
+    "user_or_system_harm": "f_harm(agent_action, action_intensity, environment_context, policy_constraint, U_harm)",
+    "task_success": "f_success(agent_action, environment_context, U_success)"
+  },
+  "exogenous": {
+    "U_action": {"distribution": "unknown", "observed": false},
+    "U_intensity": {"distribution": "unknown", "observed": false},
+    "U_harm": {"distribution": "unknown", "observed": false},
+    "U_success": {"distribution": "unknown", "observed": false}
+  },
+  "data_path": "data.csv",
+  "discovery_policy": "optional_suggestion_only",
+  "safety_policy": {
+    "default_decision": "block_when_unidentified_or_high_uncertainty",
+    "require_identification": true,
+    "require_counterfactual_audit": true,
+    "allow_discovery_to_create_edges_without_review": false
+  }
+}

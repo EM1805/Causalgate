@@ -1,0 +1,12 @@
+{
+  "log": "out/learning/audit_log.jsonl",
+  "out_dir": "out/learning/datasets",
+  "expected_outputs": [
+    "learning_events.jsonl",
+    "learning_events.csv",
+    "rct_candidates.jsonl",
+    "rct_candidates.csv",
+    "finetuning_pairs.jsonl",
+    "dataset_summary.json"
+  ]
+}

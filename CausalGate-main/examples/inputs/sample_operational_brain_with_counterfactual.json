@@ -1,0 +1,18 @@
+{
+  "user_message": "Non funziona, sistemalo.",
+  "context": {
+    "environment": "development",
+    "risk_level": "low",
+    "ambiguity": "high",
+    "counterfactual_query": {
+      "outcome": "task_success",
+      "protected_outcome": "user_or_system_harm",
+      "candidate_actions": [
+        {"action": "answer_directly", "expected_success": 0.52, "risk": "medium", "harm_probability": 0.08},
+        {"action": "ask_clarification", "expected_success": 0.78, "risk": "low", "harm_probability": 0.01},
+        {"action": "use_tool", "expected_success": 0.71, "risk": "low", "harm_probability": 0.02}
+      ]
+    }
+  },
+  "candidate_actions": ["answer_directly", "ask_clarification", "use_tool"]
+}

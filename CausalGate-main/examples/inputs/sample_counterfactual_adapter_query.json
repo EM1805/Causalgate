@@ -1,0 +1,28 @@
+{
+  "current_action": "answer_directly",
+  "outcome": "task_success",
+  "protected_outcome": "user_or_system_harm",
+  "candidate_actions": [
+    {
+      "action": "answer_directly",
+      "expected_success": 0.52,
+      "risk": "medium",
+      "harm_probability": 0.08,
+      "confidence": "medium"
+    },
+    {
+      "action": "ask_clarification",
+      "expected_success": 0.78,
+      "risk": "low",
+      "harm_probability": 0.01,
+      "confidence": "medium"
+    },
+    {
+      "action": "use_tool",
+      "expected_success": 0.71,
+      "risk": "low",
+      "harm_probability": 0.02,
+      "confidence": "low"
+    }
+  ]
+}

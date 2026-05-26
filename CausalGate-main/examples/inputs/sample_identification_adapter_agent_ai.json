@@ -1,0 +1,78 @@
+{
+  "schema_version": "causalgate.identification_adapter.v1",
+  "scm_graph": {
+    "nodes": [
+      {
+        "id": "agent_action",
+        "role": "treatment",
+        "observed": true
+      },
+      {
+        "id": "action_intensity",
+        "role": "treatment_modifier",
+        "observed": true
+      },
+      {
+        "id": "user_or_system_harm",
+        "role": "protected_outcome",
+        "observed": true
+      },
+      {
+        "id": "environment_context",
+        "role": "covariate",
+        "observed": true
+      },
+      {
+        "id": "policy_constraint",
+        "role": "policy",
+        "observed": true
+      }
+    ],
+    "edges": [
+      [
+        "environment_context",
+        "agent_action"
+      ],
+      [
+        "environment_context",
+        "user_or_system_harm"
+      ],
+      [
+        "policy_constraint",
+        "agent_action"
+      ],
+      [
+        "policy_constraint",
+        "user_or_system_harm"
+      ],
+      [
+        "agent_action",
+        "action_intensity"
+      ],
+      [
+        "action_intensity",
+        "user_or_system_harm"
+      ]
+    ],
+    "queries": [
+      {
+        "id": "q_action_harm",
+        "treatment": "agent_action",
+        "outcome": "user_or_system_harm",
+        "adjustment_set": [
+          "environment_context",
+          "policy_constraint"
+        ]
+      },
+      {
+        "id": "q_intensity_harm",
+        "treatment": "action_intensity",
+        "outcome": "user_or_system_harm",
+        "adjustment_set": [
+          "environment_context",
+          "policy_constraint"
+        ]
+      }
+    ]
+  }
+}

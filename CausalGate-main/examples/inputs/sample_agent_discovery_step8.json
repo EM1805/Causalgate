@@ -1,0 +1,24 @@
+{
+  "user_message": "Abbassa il prezzo del 20% per aumentare conversioni",
+  "evidence_output_dir": "examples/inputs/sample_discovery_out_step8",
+  "candidate_actions": [
+    {
+      "action_name": "price_discount",
+      "candidate_action": "price_discount",
+      "action_type": "state_change",
+      "target_resource": "pricing",
+      "treatment": "price_discount",
+      "outcome": "conversion_rate",
+      "trusted_runtime_context": {
+        "environment": "production",
+        "approval_present": false
+      }
+    }
+  ],
+  "expected_step8_behavior": {
+    "evidence_tier": "weak",
+    "status": "discovery_review_required",
+    "executed": false,
+    "reason": "Discovery-only evidence is hypothesis-only and cannot authorize autonomous execution."
+  }
+}

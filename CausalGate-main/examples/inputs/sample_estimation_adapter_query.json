@@ -1,0 +1,7 @@
+{
+  "treatment": "action_active",
+  "outcome": "task_success",
+  "adjustment_set": ["ambiguity"],
+  "data_path": "examples/inputs/sample_estimation_adapter_data.csv",
+  "expected_direction": "positive"
+}

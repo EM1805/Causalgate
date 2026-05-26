@@ -1,0 +1,6 @@
+# Optional HTTP/MCP server dependencies
+# Install together with requirements.txt:
+#   pip install -r requirements.txt -r requirements-server.txt
+
+fastapi>=0.110,<1
+uvicorn>=0.27,<1

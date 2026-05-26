@@ -1,0 +1,65 @@
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "tools/call",
+  "params": {
+    "name": "causalgate_run_research_cycle",
+    "arguments": {
+      "goal": "Generate a conservative scientific hypothesis about X and Y.",
+      "run_id": "sample_cycle_step4",
+      "max_steps": 3,
+      "enable_identification": false,
+      "write_ledger": true,
+      "ledger_path": "out/scientific/sample_cycle_step4_ledger.jsonl",
+      "candidate_hypotheses": [
+        {
+          "hypothesis_id": "sample_cycle_step4_hyp_001",
+          "claim": "X may influence Y through M after controlling for Z.",
+          "claim_level": "hypothesis_only",
+          "variables": {
+            "treatment": "X",
+            "outcome": "Y",
+            "mediators": [
+              "M"
+            ],
+            "confounders": [
+              "Z"
+            ]
+          },
+          "dag": {
+            "edges": [
+              [
+                "Z",
+                "X"
+              ],
+              [
+                "Z",
+                "Y"
+              ],
+              [
+                "X",
+                "M"
+              ],
+              [
+                "M",
+                "Y"
+              ]
+            ]
+          },
+          "assumptions": [
+            "Z is observed",
+            "X is measured before Y"
+          ],
+          "falsification_tests": [
+            "negative control outcome",
+            "future-X placebo test"
+          ],
+          "data_requirements": [
+            "time ordered observations",
+            "observed Z and M"
+          ]
+        }
+      ]
+    }
+  }
+}

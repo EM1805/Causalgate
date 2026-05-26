@@ -1,0 +1,20 @@
+{
+  "user_message": "Summarize the internal non-sensitive note.",
+  "candidate_action": "summarize_internal_note",
+  "candidate_actions": ["summarize_internal_note", "ask_clarification"],
+  "action_name": "summarize_internal_note",
+  "action_type": "read",
+  "target_resource": "internal_note",
+  "intended_outcome": "task_success",
+  "protected_outcome": "user_or_system_harm",
+  "environment": "development",
+  "actor": "agent",
+  "risk_level": "low",
+  "ambiguity": "low",
+  "reversibility": "reversible",
+  "requires_tool": false,
+  "requires_user_confirmation": false,
+  "evidence_available": "medium",
+  "context": {},
+  "params": {}
+}

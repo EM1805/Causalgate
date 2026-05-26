@@ -1,0 +1,40 @@
+{
+  "hypothesis_id": "hyp_claim_levels_demo",
+  "run_id": "scientific_claim_levels_demo",
+  "step": 1,
+  "title": "Bounded causal candidate, not a confirmed law",
+  "claim": "X may causally affect Y if observed confounder Z is controlled and temporal order is respected.",
+  "claim_level": "level_3",
+  "domain": "general_science",
+  "variables": {
+    "treatment": "X",
+    "outcome": "Y",
+    "confounders": ["Z"]
+  },
+  "dag": {
+    "edges": [["Z", "X"], ["Z", "Y"], ["X", "Y"]]
+  },
+  "assumptions": [
+    "X is measured before Y",
+    "Z is observed and measured before treatment",
+    "the claim must not exceed the max_allowed_claim_level returned by CausalGate"
+  ],
+  "adjustment_set": ["Z"],
+  "measurable_predictions": [
+    "After controlling for Z, changes in X should precede measurable changes in Y within the specified window."
+  ],
+  "falsification_tests": [
+    "negative control outcome",
+    "future-treatment placebo",
+    "hidden-confounding sensitivity check"
+  ],
+  "negative_controls": ["N should not change when X changes."],
+  "placebo_tests": ["Future X must not predict past Y."],
+  "sensitivity_checks": ["Estimate how strong an unobserved confounder must be to erase the effect."],
+  "data_requirements": [
+    "time ordered X, Y, Z observations",
+    "enough samples for split validation",
+    "logged preprocessing and exclusion rules"
+  ],
+  "test_plan": "Submit the hypothesis to CausalGate; run SCM-ID; only then allow estimation. Public language must obey max_allowed_claim_level."
+}

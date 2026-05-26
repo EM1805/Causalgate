@@ -1,0 +1,65 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python 3.12 test suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install package and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .[server,test]
+
+      - name: Compile Python sources
+        run: python -m compileall -q .
+
+      - name: Check stdlib registry fallback
+        run: |
+          PYTHONPATH=. python -S - <<'PY'
+          from causalgate.agent.registry_policy import ActionRegistry
+          registry = ActionRegistry('action_registry.yaml')
+          assert registry.contains('delete_resource')
+          assert registry.get('delete_resource').get('risk_level') == 'critical'
+          print('stdlib registry fallback ok')
+          PY
+
+      - name: Run pytest collection smoke
+        run: python -m pytest --collect-only -q
+
+      - name: Run CausalGate internal tests
+        run: bash run_tests.sh
+
+      - name: Generate downloadable outputs
+        if: always()
+        run: python tools/export_downloadable_outputs.py
+
+      - name: Upload downloadable outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: causalgate-product-outputs
+          path: |
+            out/downloads/causalgate_product_outputs.zip
+            out/downloads/causalgate_product_outputs/**
+          if-no-files-found: error

@@ -1,0 +1,3 @@
+from runtime_env import configure_scientific_runtime
+configure_scientific_runtime()
+

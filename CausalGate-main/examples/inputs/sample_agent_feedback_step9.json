@@ -1,0 +1,32 @@
+{
+  "user_message": "Simula un paper trade con limite su BTC.",
+  "candidate_actions": [
+    {
+      "action_name": "paper_trade_limit_order",
+      "action_type": "trade_execution",
+      "risk_level": "low",
+      "trusted_runtime_context": {
+        "paper_trading": true,
+        "risk_limits_present": true
+      }
+    }
+  ],
+  "trusted_runtime_context": {
+    "paper_trading": true,
+    "risk_limits_present": true,
+    "request_id": "agent-feedback-step9-demo"
+  },
+  "tool_args": {
+    "symbol": "BTC",
+    "notional": 100,
+    "limit_price": 50000
+  },
+  "feedback_loop": {
+    "audit_log_path": "out/learning/agent_feedback_step9.jsonl",
+    "record_outcome_after_observation": {
+      "outcome": "task_success",
+      "user_satisfaction": 0.9,
+      "latency_ms": 120
+    }
+  }
+}

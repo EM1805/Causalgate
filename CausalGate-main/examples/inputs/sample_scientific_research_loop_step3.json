@@ -1,0 +1,57 @@
+{
+  "goal": "Generate a testable candidate hypothesis about whether X influences Y through M.",
+  "run_id": "demo_scientific_loop_step3",
+  "step": 1,
+  "feedback": "Previous version missed a falsification plan.",
+  "write_ledger": true,
+  "ledger_path": "out/scientific/demo_scientific_loop_step3.jsonl",
+  "hypothesis": {
+    "hypothesis_id": "demo_hyp_001",
+    "claim": "X may causally influence Y through M, controlling for Z.",
+    "claim_level": "hypothesis_only",
+    "variables": {
+      "treatment": "X",
+      "outcome": "Y",
+      "mediators": [
+        "M"
+      ],
+      "confounders": [
+        "Z"
+      ]
+    },
+    "dag": {
+      "edges": [
+        [
+          "Z",
+          "X"
+        ],
+        [
+          "Z",
+          "Y"
+        ],
+        [
+          "X",
+          "M"
+        ],
+        [
+          "M",
+          "Y"
+        ]
+      ]
+    },
+    "assumptions": [
+      "Z is observed",
+      "X is measured before Y"
+    ],
+    "falsification_tests": [
+      "negative control outcome",
+      "future-X placebo test"
+    ],
+    "data_requirements": [
+      "time ordered observations",
+      "observed Z and M"
+    ],
+    "candidate_equation": "Y = aX + bM + cZ + e",
+    "test_plan": "Compare adjusted and mediated models; reject if future X predicts past Y."
+  }
+}

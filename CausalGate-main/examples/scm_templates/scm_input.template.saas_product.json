@@ -1,0 +1,64 @@
+{
+  "schema_version": "causalgate.scm_input.v1",
+  "name": "saas_product_scm_template",
+  "description": "SCM template for SaaS/product decisions such as pricing, onboarding, traffic, conversion, retention, and revenue.",
+  "nodes": [
+    {"id": "price_change", "role": "treatment", "observed": true},
+    {"id": "traffic_quality", "role": "covariate", "observed": true},
+    {"id": "onboarding_quality", "role": "mediator_or_covariate", "observed": true},
+    {"id": "conversion_rate", "role": "outcome", "observed": true},
+    {"id": "retention_rate", "role": "downstream_outcome", "observed": true},
+    {"id": "revenue", "role": "business_outcome", "observed": true},
+    {"id": "U_conversion", "role": "exogenous", "observed": false}
+  ],
+  "edges": [
+    ["traffic_quality", "conversion_rate"],
+    ["traffic_quality", "retention_rate"],
+    ["price_change", "conversion_rate"],
+    ["price_change", "revenue"],
+    ["onboarding_quality", "conversion_rate"],
+    ["onboarding_quality", "retention_rate"],
+    ["conversion_rate", "revenue"],
+    ["retention_rate", "revenue"],
+    ["U_conversion", "conversion_rate"]
+  ],
+  "queries": [
+    {
+      "id": "q_price_conversion",
+      "type": "total_effect",
+      "treatment": "price_change",
+      "outcome": "conversion_rate",
+      "estimand": "E[conversion_rate | do(price_change)]"
+    },
+    {
+      "id": "q_onboarding_retention",
+      "type": "total_effect",
+      "treatment": "onboarding_quality",
+      "outcome": "retention_rate",
+      "estimand": "E[retention_rate | do(onboarding_quality)]"
+    }
+  ],
+  "assumptions": [
+    {"id": "a_business_graph_reviewed", "text": "Product/business owner reviewed the graph and variable semantics.", "status": "required"},
+    {"id": "a_overlap", "text": "Historical data contains enough variation in treatment and comparable control periods.", "status": "required"},
+    {"id": "a_no_leakage", "text": "No future information is used to estimate present causal effects.", "status": "required"}
+  ],
+  "structural_equations": {
+    "conversion_rate": "f_conversion(price_change, traffic_quality, onboarding_quality, U_conversion)",
+    "retention_rate": "f_retention(onboarding_quality, traffic_quality, conversion_rate, U_retention)",
+    "revenue": "f_revenue(price_change, conversion_rate, retention_rate, U_revenue)"
+  },
+  "exogenous": {
+    "U_conversion": {"distribution": "unknown", "observed": false},
+    "U_retention": {"distribution": "unknown", "observed": false},
+    "U_revenue": {"distribution": "unknown", "observed": false}
+  },
+  "data_path": "data.csv",
+  "discovery_policy": "optional_suggestion_only",
+  "safety_policy": {
+    "default_decision": "abstain_when_unidentified",
+    "require_identification": true,
+    "require_estimation_evidence": true,
+    "allow_discovery_to_create_edges_without_review": false
+  }
+}

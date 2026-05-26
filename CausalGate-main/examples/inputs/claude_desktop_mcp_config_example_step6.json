@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "causalgate": {
+      "command": "python",
+      "args": ["-m", "causalgate.mcp.server"],
+      "env": {
+        "ANTHROPIC_API_KEY": "optional_for_causalgate_run_claude_research_cycle"
+      }
+    }
+  }
+}
