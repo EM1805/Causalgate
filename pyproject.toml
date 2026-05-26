@@ -32,6 +32,7 @@ langgraph = [
 ]
 test = [
   "pytest>=8,<9",
+  "httpx",
 ]
 
 [tool.setuptools.packages.find]
