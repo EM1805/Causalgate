@@ -7,8 +7,8 @@ def _tool(name):
     return {tool["name"]: tool for tool in list_tool_schemas()}[name]
 
 
-def test_step100_version_mentions_hypothesis_maturation():
-    assert __version__ == "0.3.0.post107"
+def test_step100_version_matches_product_rebrand():
+    assert __version__ == "0.6.1.demo-polish"
 
 
 def test_step100_normalize_dag_accepts_directed_and_bidirected_edges():
