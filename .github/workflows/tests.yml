@@ -37,7 +37,7 @@ jobs:
 
       - name: Check stdlib registry fallback
         run: |
-          PYTHONPATH=. python -S - <<'PY'
+          PYTHONPATH=. python - <<'PY'
           from causalgate.agent.registry_policy import ActionRegistry
           registry = ActionRegistry('action_registry.yaml')
           assert registry.contains('delete_resource')
