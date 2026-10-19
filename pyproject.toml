@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "causalgate"
-version = "0.6.1"
+version = "0.6.2b1"
 description = "Source-available causal firewall for AI agents with discovery, SCM identification, estimation, diagnostics, and audit reports."
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
@@ -50,6 +50,9 @@ include = [
 
 [tool.setuptools]
 py-modules = ["cli", "config", "fs_utils", "runtime_compat", "runtime_env"]
+
+[tool.setuptools.package-data]
+causalgate = ["data/*.json"]
 
 [tool.setuptools.data-files]
 "share/causalgate" = [

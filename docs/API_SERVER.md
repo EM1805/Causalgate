@@ -1,130 +1,99 @@
-# CausalGate API Server
+# CausalGate beta API — 0.6.2b1
 
-CausalGate exposes a small product HTTP API for integrating the causal firewall into AI-agent runtimes, dashboards, workflow engines, and enterprise review systems.
+An authenticated, single-tenant decision service for a small developer pilot.
+It evaluates supplied action facts and evidence and never executes tools.
+The integrator must supply trusted facts from its backend, keeping its key out
+of model context and browser code. Authentication does not prove the truth of
+submitted evidence. Scores are policy heuristics, not calibrated probabilities.
 
-The API is intentionally focused on the commercial product path:
+## Install and run
 
-```text
-agent action package
-→ POST /v1/guard
-→ policy + causal authority check
-→ PASS / REVIEW / HARD_BLOCK
-→ JSON or Markdown audit report
-```
-
-## Run locally
-
-Install server dependencies:
+Use Python 3.11 or 3.12 in a virtual environment. From a source checkout:
 
 ```bash
-python -m pip install -e .[server]
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -e '.[server]'
+export CAUSALGATE_API_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+causalgate api --host 127.0.0.1 --port 8000
 ```
 
-Run through the CLI:
+On Windows PowerShell activate `.venv\Scripts\Activate.ps1`, then set the key
+with `$env:CAUSALGATE_API_KEY = python -c "import secrets; print(secrets.token_urlsafe(32))"`.
+Keep the generated key private. `.env.example` is a reference; the application
+does not automatically load `.env`. Missing credentials disable decisions with
+HTTP 503. Weak configured keys fail startup.
+
+## Endpoints
+
+| Method and path | Access | Purpose |
+| --- | --- | --- |
+| `GET /v1/health` | Public | Process liveness and service metadata |
+| `GET /v1/ready` | Public | 200 when an API key is configured, otherwise 503 |
+| `POST /v1/guard` | Bearer | JSON decision and audit details |
+| `POST /v1/guard/markdown` | Bearer | The same decision as Markdown |
+
+The former `POST /v1/demo` route is removed: HTTP clients cannot create files.
+Generate the showcase locally with `causalgate demo --out-dir out/demo`.
+`/docs` and `/openapi.json` are disabled by default; when enabled they also
+require the bearer header (fetch them with an authenticated client).
 
 ```bash
-causalgate api --host 0.0.0.0 --port 8000
+curl http://127.0.0.1:8000/v1/ready
+curl -X POST http://127.0.0.1:8000/v1/guard \
+  -H "Authorization: Bearer $CAUSALGATE_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{"action":"summarize_dashboard","environment":"staging","risk_level":"low","action_type":"read"}'
 ```
 
-Or run directly with uvicorn:
+The read-only example returns `PASS` with `executed: false`. For a destructive
+production example change the action to `delete_resource`, risk to `critical`
+and action type to `delete`, leaving approval/rollback absent: expect `HARD_BLOCK`.
+
+## Operator configuration
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `CAUSALGATE_API_KEY` | Empty | At least 32 non-whitespace ASCII characters; generate randomly |
+| `CAUSALGATE_API_POLICY_PATH` | Built-in | Operator-owned policy file |
+| `CAUSALGATE_API_AUDIT_LOG` | Unset | Operator-owned JSONL log path; configure retention/rotation |
+| `CAUSALGATE_API_ENABLE_TOOL_GUARD` | `0` | Optional deeper checks, operator-controlled |
+| `CAUSALGATE_API_ENABLE_DOCS` | `0` | Authenticated docs/schema |
+| `CAUSALGATE_API_REQUESTS_PER_MINUTE` | `60` | Global rolling window per worker, shared by all callers |
+| `CAUSALGATE_API_MAX_BODY_BYTES` | `65536` | Request body limit, configurable from 1024 to 1048576 |
+| `CAUSALGATE_API_BODY_TIMEOUT_SECONDS` | `10` | Complete body receive deadline, maximum 60 |
+
+Requests cannot set policies, audit paths, output paths or ToolGuard selection.
+Evidence must be an inline JSON object, never a server file path. Unknown fields
+return 422. Accepted fields cover action/tool facts, split trusted/untrusted
+contexts, inline evidence, bounded graphs/queries and request/message identifiers.
+Every decision needs an explicit environment, risk (`low`, `medium`, `high`,
+`critical`) and action type (`read`, `query`, `mutation`, `write`, `delete`,
+`destructive`, `execute`, `communicate`, `share`). Boolean fields must be JSON
+booleans. Mutations and causal questions always require evidence checks;
+`require_causal_evidence: false` cannot disable them.
+
+Graphs are limited to eight nodes and 32 edges; JSON depth to 24 and values to
+5000. Duplicate keys and non-finite numbers are rejected. Both declared and
+streamed body lengths are checked. Unexpected errors return generic failures.
+Callers must not execute on a non-200 response, timeout, REVIEW or HARD_BLOCK.
+
+## Pilot hosting
+
+Run one worker behind HTTPS and an upstream connection/concurrency limit.
+The in-memory rate window resets on restart and is not a distributed quota.
+Multiple workers, per-customer accounts/quotas and unauthenticated/volumetric
+abuse need an upstream API gateway. This beta is for one trusted integration,
+not anonymous access or a multi-tenant SaaS. Rotate the key by replacing the
+server secret and restarting; previous credentials immediately lose access.
 
 ```bash
-uvicorn causalgate.api.server:app --host 0.0.0.0 --port 8000
+docker build -t causalgate:0.6.2b1 .
+docker run --rm -p 127.0.0.1:7860:7860 \
+  -e CAUSALGATE_API_KEY \
+  -v causalgate-audit:/data causalgate:0.6.2b1
 ```
 
-Open the generated OpenAPI docs at:
-
-```text
-http://localhost:8000/docs
-```
-
-## Health check
-
-```bash
-curl http://localhost:8000/v1/health
-```
-
-Returns service metadata, decision labels and authority score bands.
-
-## Guard an agent action
-
-```bash
-curl -X POST http://localhost:8000/v1/guard \
-  -H 'content-type: application/json' \
-  -d '{
-    "action": "increase_ad_spend",
-    "tool_name": "marketing_budget.write",
-    "environment": "production",
-    "risk_level": "high",
-    "action_type": "mutation",
-    "target_resource": "campaign_budget",
-    "approval_present": true,
-    "rollback_available": true,
-    "treatment": "ad_spend",
-    "outcome": "revenue",
-    "require_causal_evidence": true,
-    "causal_evidence": {
-      "identified": true,
-      "effect_estimated": true,
-      "estimate": 0.18,
-      "confidence": "medium",
-      "confidence_interval": [0.04, 0.31],
-      "diagnostics_passed": 4,
-      "diagnostics_total": 6,
-      "sensitivity_risk": "medium",
-      "hidden_confounding_risk": "medium",
-      "sample_size": 1200,
-      "scm_available": true,
-      "discovery_graph_available": true
-    }
-  }'
-```
-
-Expected response shape:
-
-```json
-{
-  "firewall_decision": "REVIEW",
-  "execution_action": "ask_user",
-  "authority_score": 64,
-  "summary": "CausalGate routed tool 'marketing_budget.write' to human/approval review before execution. Causal authority score: 64/100 (partial_for_high_impact)."
-}
-```
-
-The real response contains the full policy evaluation, causal authority evaluation, audit event, digest and evidence package.
-
-## Markdown audit report
-
-```bash
-curl -X POST http://localhost:8000/v1/guard/markdown \
-  -H 'content-type: application/json' \
-  -d @examples/actions/marketing_spend_increase.json
-```
-
-This returns the same decision rendered as a Markdown audit report.
-
-## Demo endpoint
-
-```bash
-curl -X POST http://localhost:8000/v1/demo \
-  -H 'content-type: application/json' \
-  -d '{"out_dir":"out/api-demo"}'
-```
-
-The endpoint writes the 60-second demo reports and returns their paths plus summary metadata.
-
-## Production notes
-
-The API is a **pre-execution decision service**. It does not execute tools. Callers should execute their own tool only after a `PASS`, and route `REVIEW` or `HARD_BLOCK` according to their enterprise policy.
-
-By default, the API runs in policy-only/decision-service mode with ToolGuard disabled. Enable deeper ToolGuard checks by passing:
-
-```json
-{"enable_tool_guard": true}
-```
-
-For audit logging, set:
-
-```bash
-export CAUSALGATE_API_AUDIT_LOG=out/audit/agent_decisions.jsonl
-```
+The image uses an unprivileged user and logs to `/data/decisions.jsonl`. Do not
+mount unrelated writable directories or secrets. Only the product API is served;
+legacy MCP/research entry points are outside this middleware's protection.

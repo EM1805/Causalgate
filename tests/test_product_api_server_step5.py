@@ -5,7 +5,14 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from causalgate.api.server import app, guard_action, health_payload
+from causalgate.api.server import create_app, guard_action, health_payload
+from causalgate.api.security import APISettings
+
+TEST_KEY = "test-only-not-a-real-api-key-0123456789"
+
+
+def _client():
+    return TestClient(create_app(APISettings(api_key=TEST_KEY)), headers={"Authorization": "Bearer " + TEST_KEY})
 
 
 def _strong_evidence() -> dict:
@@ -46,7 +53,7 @@ def test_guard_action_returns_authority_decision() -> None:
 
 
 def test_fastapi_guard_endpoint_blocks_missing_required_evidence() -> None:
-    client = TestClient(app)
+    client = _client()
     response = client.post(
         "/v1/guard",
         json={
@@ -70,7 +77,7 @@ def test_fastapi_guard_endpoint_blocks_missing_required_evidence() -> None:
 
 
 def test_fastapi_guard_markdown_endpoint() -> None:
-    client = TestClient(app)
+    client = _client()
     response = client.post(
         "/v1/guard/markdown",
         json={
@@ -87,13 +94,9 @@ def test_fastapi_guard_markdown_endpoint() -> None:
     assert "summarize_dashboard" in response.text
 
 
-def test_fastapi_demo_endpoint_writes_reports(tmp_path: Path) -> None:
-    client = TestClient(app)
+def test_fastapi_demo_endpoint_cannot_write_reports(tmp_path: Path) -> None:
+    client = _client()
     response = client.post("/v1/demo", json={"out_dir": str(tmp_path)})
 
-    assert response.status_code == 200
-    payload = response.json()
-    assert payload["output_dir"] == str(tmp_path)
-    assert len(payload["cases"]) == 3
-    assert (tmp_path / "summary.json").exists()
-    assert (tmp_path / "summary.md").exists()
+    assert response.status_code == 404
+    assert not (tmp_path / "summary.json").exists()

@@ -51,6 +51,19 @@ jobs:
       - name: Run CausalGate internal tests
         run: bash run_tests.sh
 
+      - name: Run beta API security regressions
+        run: python -m pytest -q tests/test_beta_api_security.py tests/test_product_api_server_step5.py
+
+      - name: Build distribution and verify fresh wheel outside checkout
+        run: |
+          python -m pip install build
+          python -m build
+          python -m venv "$RUNNER_TEMP/causalgate-wheel"
+          wheel_path="$(realpath dist/*.whl)"
+          "$RUNNER_TEMP/causalgate-wheel/bin/python" -m pip install "${wheel_path}[server,test]"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/causalgate-wheel/bin/python" "$GITHUB_WORKSPACE/tools/smoke_installed_beta.py"
+
       - name: Generate downloadable outputs
         if: always()
         run: python tools/export_downloadable_outputs.py

@@ -14,7 +14,7 @@ from causalgate.demo import run_product_demo
 AgentCausalFirewall = AgentActionFirewall
 CausalGateResult = AgentFirewallResult
 
-__version__ = "0.6.1.demo-polish"
+__version__ = "0.6.2b1"
 
 __all__ = [
     "AgentActionFirewall",

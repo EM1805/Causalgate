@@ -10,3 +10,10 @@ out/
 # Local/editor files
 .DS_Store
 .vscode/
+.env
+.env.*
+!.env.example
+.venv/
+build/
+dist/
+*.egg-info/

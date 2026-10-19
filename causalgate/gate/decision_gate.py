@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sysconfig
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping, Optional, Set
 
@@ -31,6 +32,9 @@ def _resolve_project_path(path_value: str) -> str:
     candidate = _PROJECT_ROOT / path
     if candidate.exists():
         return str(candidate)
+    installed_data = Path(sysconfig.get_path("data")) / "share" / "causalgate" / path
+    if installed_data.is_file():
+        return str(installed_data)
     return str(candidate)
 
 

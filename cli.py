@@ -1042,6 +1042,8 @@ def _cmd_api(args: argparse.Namespace) -> int:
         port=int(args.port),
         reload=bool(args.reload),
         log_level=args.log_level,
+        proxy_headers=False,
+        workers=1,
     )
     return 0
 
@@ -1058,7 +1060,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_demo.set_defaults(func=_cmd_demo)
 
     p_api = sub.add_parser('api', help='Run the CausalGate product HTTP API server')
-    p_api.add_argument('--host', default='0.0.0.0', help='Host/interface to bind')
+    p_api.add_argument('--host', default='127.0.0.1', help='Host/interface to bind (loopback by default)')
     p_api.add_argument('--port', type=int, default=8000, help='Port to bind')
     p_api.add_argument('--reload', action='store_true', help='Enable uvicorn reload for local development')
     p_api.add_argument('--log-level', default='info', choices=['critical','error','warning','info','debug','trace'])
