@@ -158,7 +158,8 @@ print(result.authority_score)</pre>
 causalgate demo --out-dir out/demo --pretty
 
 # API server
-causalgate api --host 0.0.0.0 --port 8000
+# Configure CAUSALGATE_API_KEY in the server environment first.
+causalgate api --host 127.0.0.1 --port 8000
 curl http://localhost:8000/v1/health</pre>
       </div>
     </section>

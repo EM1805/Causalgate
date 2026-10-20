@@ -1,5 +1,11 @@
 # CausalGate
 
+**Current version: 0.6.2b1 — developer beta for one trusted integration.**
+The HTTP API requires a server-configured bearer key and rejects client-supplied
+policies and file paths. See [beta release notes](docs/BETA_RELEASE.md) and the
+[authenticated API setup](docs/API_SERVER.md). This is not an unrestricted
+public SaaS or a safety certification.
+
 **CausalGate is a source-available causal firewall for AI agents.**
 
 It checks whether an agent recommendation, tool call, or high-impact action has enough causal authority before the action is allowed, warned, blocked, or routed to human review.
@@ -104,7 +110,8 @@ Run CausalGate as an HTTP decision service for agent runtimes, dashboards or ent
 
 ```bash
 python -m pip install -e .[server]
-causalgate api --host 0.0.0.0 --port 8000
+export CAUSALGATE_API_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+causalgate api --host 127.0.0.1 --port 8000
 ```
 
 Core endpoints:
@@ -113,13 +120,14 @@ Core endpoints:
 GET  /v1/health
 POST /v1/guard
 POST /v1/guard/markdown
-POST /v1/demo
+GET  /v1/ready
 ```
 
 Example request:
 
 ```bash
 curl -X POST http://localhost:8000/v1/guard \
+  -H "Authorization: Bearer $CAUSALGATE_API_KEY" \
   -H 'content-type: application/json' \
   -d @examples/actions/marketing_spend_increase.json
 ```
@@ -206,13 +214,13 @@ Run the product HTTP API:
 
 ```bash
 python -m pip install -e .[server]
-causalgate api --host 0.0.0.0 --port 8000
+causalgate api --host 127.0.0.1 --port 8000
 ```
 
 The legacy MCP bridge remains available internally, but the main product server is now:
 
 ```bash
-uvicorn causalgate.api.server:app --host 0.0.0.0 --port 8000
+python -m uvicorn causalgate.api.server:app --host 127.0.0.1 --port 8000 --workers 1 --no-proxy-headers
 ```
 
 

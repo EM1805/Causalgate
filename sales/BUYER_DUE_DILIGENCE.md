@@ -1,5 +1,9 @@
 # Buyer Due Diligence Notes
 
+Current checkpoint: **0.6.2b1 single-tenant developer beta**. The API is
+authenticated; see `docs/API_SERVER.md` and `docs/BETA_RELEASE.md` for limits.
+Authentication does not establish scientific validity of submitted evidence.
+
 ## Product summary
 
 CausalGate is a source-available causal firewall for AI agents. It checks whether a proposed agent action has enough policy clearance and causal authority before allowing execution.
@@ -43,7 +47,7 @@ In another shell:
 
 ```bash
 curl http://127.0.0.1:8000/v1/health
-curl -X POST http://127.0.0.1:8000/v1/demo
+curl http://127.0.0.1:8000/v1/ready
 ```
 
 ## Known limits
@@ -59,7 +63,7 @@ curl -X POST http://127.0.0.1:8000/v1/demo
 1. Run license audit.
 2. Deploy the API server.
 3. Publish landing page.
-4. Add authentication and license keys.
+4. Add per-customer accounts and license keys (operator bearer authentication is included in the beta).
 5. Add dashboard and project history.
 6. Create integrations with agent frameworks.
 7. Start beta with 5–10 AI-agent builders.

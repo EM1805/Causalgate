@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from importlib.resources import files
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping
@@ -63,23 +64,13 @@ class DemoRunResult:
         }
 
 
-def _repo_path(*parts: str) -> Path:
-    return Path(__file__).resolve().parents[1].joinpath(*parts)
-
-
-def _read_json(path: str | Path) -> Dict[str, Any]:
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(payload, dict):
-        raise ValueError(f"expected JSON object in {path}")
-    return payload
-
-
 def load_showcase_cases() -> list[DemoCase]:
     """Return the three-case product demo: PASS, REVIEW, HARD_BLOCK."""
 
-    marketing_action = _read_json(_repo_path("examples", "actions", "marketing_spend_increase.json"))
-    weak_evidence = _read_json(_repo_path("examples", "evidence", "marketing_weak_evidence.json"))
-    strong_evidence = _read_json(_repo_path("examples", "evidence", "marketing_strong_evidence.json"))
+    assets = json.loads(files("causalgate").joinpath("data/showcase.json").read_text(encoding="utf-8"))
+    marketing_action = assets["marketing_action"]
+    weak_evidence = assets["weak_evidence"]
+    strong_evidence = assets["strong_evidence"]
 
     return [
         DemoCase(

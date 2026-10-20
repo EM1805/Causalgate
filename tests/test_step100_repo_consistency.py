@@ -8,7 +8,8 @@ def _tool(name):
 
 
 def test_step100_version_matches_product_rebrand():
-    assert __version__ == "0.6.1.demo-polish"
+    from importlib.metadata import version
+    assert __version__ == version("causalgate")
 
 
 def test_step100_normalize_dag_accepts_directed_and_bidirected_edges():
