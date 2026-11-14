@@ -19,6 +19,13 @@ agent proposes an action
 
 CausalGate does **not** prove causality or replace human review. It enforces a reproducible decision gate around causal evidence, trusted runtime context, audit trails, and explicit policy.
 
+For repository changes, CausalGate also provides a separate, fail-closed
+[pull-request verification contract](docs/PR_VERIFICATION_CONTRACT.md). It keeps
+the proposer distinct from the verifier and binds required evidence artifacts
+to their SHA-256 digests and the proposed head commit. This verifies an
+operational contract; it is not a substitute for independent security testing
+or cryptographic provenance attestation.
+
 ## Why this exists
 
 AI agents increasingly recommend or execute actions. Many proposed actions are justified with correlations, weak evidence, or unsupported causal language. CausalGate adds an evidence boundary between the agent and the action.

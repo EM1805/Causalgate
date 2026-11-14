@@ -17,6 +17,7 @@ dependencies = [
 
 [project.scripts]
 causalgate = "cli:main"
+causalgate-pr-verify = "causalgate.pr_verification.cli:main"
 
 [project.optional-dependencies]
 server = [

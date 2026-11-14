@@ -1,0 +1,17 @@
+schema_version: causalgate.pr-policy/v1
+version: causalgate-repository-pr-policy-v1
+fail_closed: true
+require_expected_policy_digest: true
+allowed_repositories:
+  - EM1805/Causalgate
+require_distinct_roles: true
+trusted_verifiers:
+  - github-actions/causalgate-pr-verifier
+require_independent_evidence: true
+trusted_evidence_producers:
+  - github-actions/causalgate-ci
+required_evidence_types:
+  - unit-tests
+  - api-security-regressions
+  - policy-audit
+max_evidence_bytes: 10485760
