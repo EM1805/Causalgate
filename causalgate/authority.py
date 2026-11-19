@@ -219,6 +219,16 @@ def score_causal_authority(
         profile = "medium_impact"
         decision = REVIEW if score >= 40 else HARD_BLOCK
 
+    # An aggregate score can be high even without identified causal effect.
+    # Identification is a prerequisite, not a compensable score component.
+    # In informational-only mode (require_evidence=False), retain the
+    # established advisory semantics.
+    if require_evidence and not ev.identified:
+        decision = HARD_BLOCK
+        level = "unidentified"
+        reasons.append("Causal identification has not been established; authority veto applied.")
+        required.append("Provide an identified causal estimand and verify the identification evidence before execution.")
+
     # Deduplicate while preserving order.
     dedup_required: list[str] = []
     for item in required:
