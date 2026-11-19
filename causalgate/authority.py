@@ -225,7 +225,10 @@ def score_causal_authority(
     # established advisory semantics.
     if require_evidence and not ev.identified:
         decision = HARD_BLOCK
-        level = "unidentified"
+        # Keep the established WEAK reason code for low scores; distinguish
+        # a high-scoring but unidentified package for independent review.
+        if score >= 40:
+            level = "unidentified"
         reasons.append("Causal identification has not been established; authority veto applied.")
         required.append("Provide an identified causal estimand and verify the identification evidence before execution.")
 
