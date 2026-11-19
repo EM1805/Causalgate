@@ -31,7 +31,9 @@ def _truthy(value: Any) -> bool:
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
-        return int(value) == 1
+        # Do not turn fractional numbers into positive evidence via int().
+        # NaN and infinities also fail closed without raising an exception.
+        return value == 1
     return _clean_str(value).lower() in {"1", "true", "yes", "y", "on", "passed", "pass", "available", "identified"}
 
 
