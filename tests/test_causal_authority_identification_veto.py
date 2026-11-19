@@ -1,5 +1,4 @@
 """Protocol Genesis: falsify score-only authority under missing identification."""
-import pytest
 from causalgate import CausalEvidence, score_causal_authority
 
 STRONG = {
@@ -29,26 +28,25 @@ def test_positive_control_strong_identified_evidence_passes():
     assert result.authority_decision == "PASS"
 
 
-@pytest.mark.parametrize("risk_level", ["low", "medium", "high", "critical"])
-def test_missing_identification_cannot_be_compensated_by_score(risk_level):
+def test_missing_identification_cannot_be_compensated_by_score():
     data = {**STRONG, "identified": False, "identification_status": "not_identified"}
-    result = score_causal_authority(data, risk_level=risk_level)
-    assert result.authority_score >= 70  # This is why a veto is required.
-    assert result.authority_decision == "HARD_BLOCK"
-    assert result.authority_level == "unidentified"
-    assert result.required_next_steps
+    for risk_level in ("low", "medium", "high", "critical"):
+        result = score_causal_authority(data, risk_level=risk_level)
+        assert result.authority_score >= 70  # This is why a veto is required.
+        assert result.authority_decision == "HARD_BLOCK"
+        assert result.authority_level == "unidentified"
+        assert result.required_next_steps
 
 
-@pytest.mark.parametrize(
-    "identified,status",
-    [(False, "identified"), (True, "failed"), (True, "unidentified"),
-     (False, "success"), (False, "not_identified")],
-)
-def test_contradictory_identification_fields_fail_closed(identified, status):
-    data = {**STRONG, "identified": identified, "identification_status": status}
-    evidence = CausalEvidence.from_mapping(data)
-    assert evidence.identified is False
-    assert score_causal_authority(data, risk_level="high").authority_decision == "HARD_BLOCK"
+def test_contradictory_identification_fields_fail_closed():
+    for identified, status in (
+        (False, "identified"), (True, "failed"), (True, "unidentified"),
+        (False, "success"), (False, "not_identified")
+    ):
+        data = {**STRONG, "identified": identified, "identification_status": status}
+        evidence = CausalEvidence.from_mapping(data)
+        assert evidence.identified is False, (identified, status)
+        assert score_causal_authority(data, risk_level="high").authority_decision == "HARD_BLOCK"
 
 
 def test_legacy_status_only_identification_still_supported():
