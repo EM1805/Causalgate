@@ -49,6 +49,22 @@ def test_contradictory_identification_fields_fail_closed():
         assert score_causal_authority(data, risk_level="high").authority_decision == "HARD_BLOCK"
 
 
+def test_noncanonical_numeric_identification_fails_closed():
+    for value in (0.5, 1.2, 1.9, -0.2, float("nan"), float("inf"),
+                  float("-inf"), "1.2", "nan"):
+        data = {**STRONG, "identified": value}
+        evidence = CausalEvidence.from_mapping(data)
+        assert evidence.identified is False, repr(value)
+        assert score_causal_authority(data, risk_level="high").authority_decision == "HARD_BLOCK"
+
+
+def test_canonical_identification_representations_still_pass():
+    for value in (True, 1, 1.0, "1", "true", "identified"):
+        data = {**STRONG, "identified": value}
+        assert CausalEvidence.from_mapping(data).identified is True, repr(value)
+        assert score_causal_authority(data, risk_level="high").authority_decision == "PASS"
+
+
 def test_legacy_status_only_identification_still_supported():
     data = dict(STRONG)
     data.pop("identified")
