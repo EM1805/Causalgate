@@ -31,7 +31,9 @@ def _truthy(value: Any) -> bool:
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
-        return int(value) == 1
+        # Do not turn fractional numbers into positive evidence via int().
+        # NaN and infinities also fail closed without raising an exception.
+        return value == 1
     return _clean_str(value).lower() in {"1", "true", "yes", "y", "on", "passed", "pass", "available", "identified"}
 
 
@@ -111,7 +113,17 @@ class CausalEvidence:
             or data.get("status"),
             "unknown",
         ).lower()
-        identified = _truthy(data.get("identified")) or identification_status in {"identified", "passed", "ok", "success"}
+        # An explicit false must not be overridden by an optimistic status
+        # string in the same evidence package. Contradictory negative status
+        # also takes precedence over an explicit true.
+        negative_status = identification_status in {
+            "unidentified", "not_identified", "not-identifiable",
+            "non_identifiable", "non-identifiable", "failed", "failure",
+        }
+        if "identified" in data:
+            identified = _truthy(data["identified"]) and not negative_status
+        else:
+            identified = identification_status in {"identified", "passed", "ok", "success"}
 
         ci_raw = data.get("confidence_interval") or data.get("ci") or data.get("effect_ci")
         confidence_interval: tuple[float, float] | None = None
