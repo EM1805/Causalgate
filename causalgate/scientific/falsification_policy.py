@@ -72,9 +72,20 @@ _MEASUREMENT_TERMS = (
 
 # Match standalone measurement terms. Substring checks incorrectly accepted
 # "community"/"opportunity" because they contain "unit".
+# Recognize common inflected directional terms without accepting a substring
+# embedded in unrelated words (e.g. "surprise" or "community").
+_MEASUREMENT_INFLECTIONS = (
+    "increases", "increased", "increasing",
+    "decreases", "decreased", "decreasing",
+    "rises", "rising", "falls", "falling",
+    "measures", "measuring", "observes", "observing",
+    "windows", "lags",
+)
 _MEASUREMENT_PATTERN = re.compile(
     r"(?<!\w)(?:"
     + "|".join(re.escape(term) for term in _MEASUREMENT_TERMS if term.isalpha())
+    + "|"
+    + "|".join(_MEASUREMENT_INFLECTIONS)
     + r")(?!\w)|%"
 )
 
