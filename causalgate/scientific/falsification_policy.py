@@ -8,6 +8,7 @@ It must also provide a falsifiable prediction, negative/placebo controls,
 required evidence, and an adjustment strategy when confounding is present.
 """
 
+import re
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, Iterable, List, Mapping, Set
 
@@ -110,11 +111,20 @@ def _contains_any(texts: List[str], terms: Iterable[str]) -> bool:
     return any(term in low for term in terms)
 
 
+# Baseline independent of the mechanism graph: lexical tokenization using
+# standalone words and a small conventional directional vocabulary.
+_MEASUREMENT_WORDS = frozenset(term for term in _MEASUREMENT_TERMS if term.isalpha()) | frozenset(
+    ("increases", "increased", "increasing", "decreases", "decreased",
+     "decreasing", "rises", "rising", "falls", "falling",
+     "measures", "measuring", "observes", "observing", "windows", "lags")
+)
+
+
 def _prediction_is_measurable(prediction: str) -> bool:
-    low = prediction.lower()
-    # A prediction must be more than "X affects Y": it needs direction,
-    # measurable observation, timing, or a concrete comparative statement.
-    return any(term in low for term in _MEASUREMENT_TERMS)
+    # Match whole word tokens, not fragments inside unrelated words.
+    # Keep percent as a separate measurement marker.
+    words = re.findall(r"\w+|%", prediction.lower())
+    return any(word == "%" or word in _MEASUREMENT_WORDS for word in words)
 
 
 def _edge_pairs(hypothesis: ScientificHypothesisPackage) -> List[tuple[str, str]]:
