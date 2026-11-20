@@ -73,9 +73,9 @@ _MEASUREMENT_TERMS = (
 # Match standalone measurement terms. Substring checks incorrectly accepted
 # "community"/"opportunity" because they contain "unit".
 _MEASUREMENT_PATTERN = re.compile(
-    r"(?<!\\w)(?:"
+    r"(?<!\w)(?:"
     + "|".join(re.escape(term) for term in _MEASUREMENT_TERMS if term.isalpha())
-    + r")(?!\\w)|%"
+    + r")(?!\w)|%"
 )
 
 
