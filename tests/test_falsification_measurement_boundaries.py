@@ -1,24 +1,26 @@
-"""Regression checks: unrelated substrings must not satisfy measurement gates."""
+"""Regression checks: accidental substrings are not measurement cues.
 
-import pytest
+Plain test functions are intentional: the repository's custom test runner imports
+modules using a lightweight pytest shim, so decorators must not be required.
+"""
 
 from causalgate.scientific.falsification_policy import _prediction_is_measurable
 
 
-@pytest.mark.parametrize("prediction", [
-    "Community practices affect Y.",
-    "An opportunity influences the outcome.",
-    "The data suggests a connection between X and Y.",
-])
-def test_incidental_substrings_are_not_measurable(prediction):
-    assert not _prediction_is_measurable(prediction)
+def test_incidental_substrings_are_not_measurable():
+    for prediction in (
+        "Community practices affect Y.",
+        "An opportunity influences the outcome.",
+        "The data suggests a connection between X and Y.",
+    ):
+        assert not _prediction_is_measurable(prediction), prediction
 
 
-@pytest.mark.parametrize("prediction", [
-    "Y will increase after X.",
-    "Y is 12% higher when X is present.",
-    "Y is measured within 7 days.",
-    "The count changes by 3 units.",
-])
-def test_explicit_measurement_signals_still_accepted(prediction):
-    assert _prediction_is_measurable(prediction)
+def test_explicit_measurement_signals_still_accepted():
+    for prediction in (
+        "Y will increase after X.",
+        "Y is 12% higher when X is present.",
+        "Y is measured within 7 days.",
+        "The count changes by 3 units.",
+    ):
+        assert _prediction_is_measurable(prediction), prediction
