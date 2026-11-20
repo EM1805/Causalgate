@@ -8,6 +8,7 @@ It must also provide a falsifiable prediction, negative/placebo controls,
 required evidence, and an adjustment strategy when confounding is present.
 """
 
+import re
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, Iterable, List, Mapping, Set
 
@@ -69,6 +70,15 @@ _MEASUREMENT_TERMS = (
 )
 
 
+# Match standalone measurement terms. Substring checks incorrectly accepted
+# "community"/"opportunity" because they contain "unit".
+_MEASUREMENT_PATTERN = re.compile(
+    r"(?<!\\w)(?:"
+    + "|".join(re.escape(term) for term in _MEASUREMENT_TERMS if term.isalpha())
+    + r")(?!\\w)|%"
+)
+
+
 def _clean_str(value: Any, default: str = "") -> str:
     if value is None:
         return default
@@ -111,10 +121,10 @@ def _contains_any(texts: List[str], terms: Iterable[str]) -> bool:
 
 
 def _prediction_is_measurable(prediction: str) -> bool:
-    low = prediction.lower()
     # A prediction must be more than "X affects Y": it needs direction,
     # measurable observation, timing, or a concrete comparative statement.
-    return any(term in low for term in _MEASUREMENT_TERMS)
+    # Require term boundaries to prevent accidental acceptance via substrings.
+    return bool(_MEASUREMENT_PATTERN.search(prediction.lower()))
 
 
 def _edge_pairs(hypothesis: ScientificHypothesisPackage) -> List[tuple[str, str]]:
